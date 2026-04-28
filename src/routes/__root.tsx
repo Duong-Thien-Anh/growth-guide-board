@@ -82,6 +82,7 @@ function RootComponent() {
             </main>
           </div>
         </div>
+        <Toaster position="bottom-right" />
       </SidebarProvider>
     </QueryClientProvider>
   );
