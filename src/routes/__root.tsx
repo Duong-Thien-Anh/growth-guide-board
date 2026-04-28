@@ -6,6 +6,7 @@ import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { Search, Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -81,6 +82,7 @@ function RootComponent() {
             </main>
           </div>
         </div>
+        <Toaster position="bottom-right" />
       </SidebarProvider>
     </QueryClientProvider>
   );
