@@ -9,7 +9,7 @@ interface OverviewStats {
   pages_total: number;
   portfolios_total: number;
   activity: { day: string; views: number }[];
-  top_posts: { id: string; title: string; views: number; status: string }[];
+  top_posts: { id: string | number; title: string; views: number; status: string }[];
 }
 
 function downloadBlob(content: string | Blob, filename: string, mime: string) {

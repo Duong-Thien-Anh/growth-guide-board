@@ -9,16 +9,41 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TagsRouteImport } from './routes/tags'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RedirectsRouteImport } from './routes/redirects'
+import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as PortfoliosRouteImport } from './routes/portfolios'
 import { Route as PagesRouteImport } from './routes/pages'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as NavigationRouteImport } from './routes/navigation'
 import { Route as MediaRouteImport } from './routes/media'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LeadsRouteImport } from './routes/leads'
+import { Route as CouponsRouteImport } from './routes/coupons'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TagsRoute = TagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedirectsRoute = RedirectsRouteImport.update({
+  id: '/redirects',
+  path: '/redirects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostsRoute = PostsRouteImport.update({
@@ -36,9 +61,44 @@ const PagesRoute = PagesRouteImport.update({
   path: '/pages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NavigationRoute = NavigationRouteImport.update({
+  id: '/navigation',
+  path: '/navigation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaRoute = MediaRouteImport.update({
   id: '/media',
   path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadsRoute = LeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CouponsRoute = CouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesRoute = CategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -49,60 +109,163 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesRoute
+  '/contacts': typeof ContactsRoute
+  '/coupons': typeof CouponsRoute
+  '/leads': typeof LeadsRoute
+  '/login': typeof LoginRoute
   '/media': typeof MediaRoute
+  '/navigation': typeof NavigationRoute
+  '/orders': typeof OrdersRoute
   '/pages': typeof PagesRoute
   '/portfolios': typeof PortfoliosRoute
   '/posts': typeof PostsRoute
+  '/products': typeof ProductsRoute
+  '/redirects': typeof RedirectsRoute
   '/settings': typeof SettingsRoute
+  '/tags': typeof TagsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesRoute
+  '/contacts': typeof ContactsRoute
+  '/coupons': typeof CouponsRoute
+  '/leads': typeof LeadsRoute
+  '/login': typeof LoginRoute
   '/media': typeof MediaRoute
+  '/navigation': typeof NavigationRoute
+  '/orders': typeof OrdersRoute
   '/pages': typeof PagesRoute
   '/portfolios': typeof PortfoliosRoute
   '/posts': typeof PostsRoute
+  '/products': typeof ProductsRoute
+  '/redirects': typeof RedirectsRoute
   '/settings': typeof SettingsRoute
+  '/tags': typeof TagsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesRoute
+  '/contacts': typeof ContactsRoute
+  '/coupons': typeof CouponsRoute
+  '/leads': typeof LeadsRoute
+  '/login': typeof LoginRoute
   '/media': typeof MediaRoute
+  '/navigation': typeof NavigationRoute
+  '/orders': typeof OrdersRoute
   '/pages': typeof PagesRoute
   '/portfolios': typeof PortfoliosRoute
   '/posts': typeof PostsRoute
+  '/products': typeof ProductsRoute
+  '/redirects': typeof RedirectsRoute
   '/settings': typeof SettingsRoute
+  '/tags': typeof TagsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/media' | '/pages' | '/portfolios' | '/posts' | '/settings'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/media' | '/pages' | '/portfolios' | '/posts' | '/settings'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
+    | '/categories'
+    | '/contacts'
+    | '/coupons'
+    | '/leads'
+    | '/login'
     | '/media'
+    | '/navigation'
+    | '/orders'
     | '/pages'
     | '/portfolios'
     | '/posts'
+    | '/products'
+    | '/redirects'
     | '/settings'
+    | '/tags'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/categories'
+    | '/contacts'
+    | '/coupons'
+    | '/leads'
+    | '/login'
+    | '/media'
+    | '/navigation'
+    | '/orders'
+    | '/pages'
+    | '/portfolios'
+    | '/posts'
+    | '/products'
+    | '/redirects'
+    | '/settings'
+    | '/tags'
+  id:
+    | '__root__'
+    | '/'
+    | '/categories'
+    | '/contacts'
+    | '/coupons'
+    | '/leads'
+    | '/login'
+    | '/media'
+    | '/navigation'
+    | '/orders'
+    | '/pages'
+    | '/portfolios'
+    | '/posts'
+    | '/products'
+    | '/redirects'
+    | '/settings'
+    | '/tags'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CategoriesRoute: typeof CategoriesRoute
+  ContactsRoute: typeof ContactsRoute
+  CouponsRoute: typeof CouponsRoute
+  LeadsRoute: typeof LeadsRoute
+  LoginRoute: typeof LoginRoute
   MediaRoute: typeof MediaRoute
+  NavigationRoute: typeof NavigationRoute
+  OrdersRoute: typeof OrdersRoute
   PagesRoute: typeof PagesRoute
   PortfoliosRoute: typeof PortfoliosRoute
   PostsRoute: typeof PostsRoute
+  ProductsRoute: typeof ProductsRoute
+  RedirectsRoute: typeof RedirectsRoute
   SettingsRoute: typeof SettingsRoute
+  TagsRoute: typeof TagsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tags': {
+      id: '/tags'
+      path: '/tags'
+      fullPath: '/tags'
+      preLoaderRoute: typeof TagsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redirects': {
+      id: '/redirects'
+      path: '/redirects'
+      fullPath: '/redirects'
+      preLoaderRoute: typeof RedirectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/posts': {
@@ -126,11 +289,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/navigation': {
+      id: '/navigation'
+      path: '/navigation'
+      fullPath: '/navigation'
+      preLoaderRoute: typeof NavigationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/media': {
       id: '/media'
       path: '/media'
       fullPath: '/media'
       preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leads': {
+      id: '/leads'
+      path: '/leads'
+      fullPath: '/leads'
+      preLoaderRoute: typeof LeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coupons': {
+      id: '/coupons'
+      path: '/coupons'
+      fullPath: '/coupons'
+      preLoaderRoute: typeof CouponsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -145,12 +357,31 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CategoriesRoute: CategoriesRoute,
+  ContactsRoute: ContactsRoute,
+  CouponsRoute: CouponsRoute,
+  LeadsRoute: LeadsRoute,
+  LoginRoute: LoginRoute,
   MediaRoute: MediaRoute,
+  NavigationRoute: NavigationRoute,
+  OrdersRoute: OrdersRoute,
   PagesRoute: PagesRoute,
   PortfoliosRoute: PortfoliosRoute,
   PostsRoute: PostsRoute,
+  ProductsRoute: ProductsRoute,
+  RedirectsRoute: RedirectsRoute,
   SettingsRoute: SettingsRoute,
+  TagsRoute: TagsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

@@ -1,4 +1,4 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -55,35 +55,47 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const [qc] = useState(() => new QueryClient({ defaultOptions: { queries: { staleTime: 30_000 } } }));
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  const isAuthRoute = path === "/login";
+
   return (
     <QueryClientProvider client={qc}>
-      <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-background">
-          <AdminSidebar />
-          <div className="flex flex-1 flex-col min-w-0">
-            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 backdrop-blur px-4">
-              <SidebarTrigger />
-              <div className="relative ml-1 hidden md:block">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search posts, pages, media…" className="pl-8 h-9 w-72 bg-muted/40 border-transparent focus-visible:bg-background" />
-              </div>
-              <div className="ml-auto flex items-center gap-2">
-                <button className="relative rounded-md p-2 hover:bg-muted text-muted-foreground" aria-label="Notifications">
-                  <Bell className="h-4 w-4" />
-                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
-                </button>
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="text-xs bg-[color:var(--primary-soft)] text-primary">LN</AvatarFallback>
-                </Avatar>
-              </div>
-            </header>
-            <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 max-w-[1400px] w-full mx-auto">
-              <Outlet />
-            </main>
+      {isAuthRoute ? (
+        <>
+          <Outlet />
+          <Toaster position="bottom-right" />
+        </>
+      ) : (
+        <SidebarProvider>
+          <div className="flex min-h-screen w-full bg-background">
+            <AdminSidebar />
+            <div className="flex flex-1 flex-col min-w-0">
+              <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b bg-background/80 backdrop-blur px-4">
+                <SidebarTrigger />
+                <div className="relative ml-1 hidden md:block">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder="Search posts, pages, media…" className="pl-8 h-9 w-72 bg-muted/40 border-transparent focus-visible:bg-background" />
+                </div>
+                <div className="ml-auto flex items-center gap-2">
+                  <button className="relative rounded-md p-2 hover:bg-muted text-muted-foreground" aria-label="Notifications">
+                    <Bell className="h-4 w-4" />
+                    <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
+                  </button>
+                  <Link to="/settings" aria-label="Account">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="text-xs bg-[color:var(--primary-soft)] text-primary">LN</AvatarFallback>
+                    </Avatar>
+                  </Link>
+                </div>
+              </header>
+              <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 max-w-[1400px] w-full mx-auto">
+                <Outlet />
+              </main>
+            </div>
           </div>
-        </div>
-        <Toaster position="bottom-right" />
-      </SidebarProvider>
+          <Toaster position="bottom-right" />
+        </SidebarProvider>
+      )}
     </QueryClientProvider>
   );
 }
