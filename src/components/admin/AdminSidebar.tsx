@@ -43,7 +43,10 @@ const site: Item[] = [
   { title: "Redirects", url: "/redirects", icon: ArrowLeftRight },
 ];
 
-const account: Item[] = [{ title: "Settings", url: "/settings", icon: Settings }];
+const account: Item[] = [
+  { title: "Accounts", url: "/accounts", icon: Users },
+  { title: "Settings", url: "/settings", icon: Settings },
+];
 
 function Group({ label, items, isActive }: { label: string; items: Item[]; isActive: (u: string) => boolean }) {
   return (
