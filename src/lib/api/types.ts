@@ -219,4 +219,19 @@ export interface AdminUser {
   login?: string | null;
   role: "admin" | "administrator" | "super_admin" | string;
   registered?: string;
+  billing_first_name?: string | null;
+  billing_last_name?: string | null;
+  billing_phone?: string | null;
+  billing_address?: string | null;
+  billing_city?: string | null;
+  billing_country?: string | null;
+}
+
+export interface HealthStatus {
+  ok: boolean;
+  database: "up" | "down" | "unknown";
+  app?: string;
+  version?: string;
+  checked_at: string;
+  latency_ms?: number;
 }
