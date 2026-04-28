@@ -1,14 +1,32 @@
-import type { Post, Page, Portfolio, MediaItem, ListParams, Paginated, Status } from "./types";
+import type {
+  Post, Page, Portfolio, MediaItem, ListParams, Paginated,
+  PublishStatus, Product, Order, Contact, Lead, Coupon, Category, Tag, Redirect, NavigationItem,
+  AdminUser, HealthStatus,
+} from "./types";
+
+const ADMIN_USERS: AdminUser[] = [
+  {
+    id: 1, name: "Linh Nguyen", email: "linh@atelier.co", login: null,
+    role: "super_admin", registered: "2024-03-12T10:00:00Z",
+    billing_first_name: "Linh", billing_last_name: "Nguyen", billing_phone: "+84 90 123 4567",
+    billing_address: "12 Nguyen Hue", billing_city: "Ho Chi Minh City", billing_country: "Vietnam",
+  },
+  { id: 2, name: "Marcus Lee", email: "marcus@atelier.co", login: "marcus", role: "admin", registered: "2024-06-01T10:00:00Z" },
+  { id: 3, name: "Priya Shah", email: "priya@atelier.co", login: "priya", role: "administrator", registered: "2025-01-22T10:00:00Z" },
+  { id: 4, name: "Tom Becker", email: "tom@atelier.co", login: "tom", role: "admin", registered: "2025-09-04T10:00:00Z" },
+];
+let CURRENT_USER_ID: number = 1;
+
 
 const authors = [
-  { id: "u1", name: "Linh Nguyen" },
-  { id: "u2", name: "Marcus Lee" },
-  { id: "u3", name: "Priya Shah" },
-  { id: "u4", name: "Tom Becker" },
+  { id: 1, name: "Linh Nguyen" },
+  { id: 2, name: "Marcus Lee" },
+  { id: 3, name: "Priya Shah" },
+  { id: 4, name: "Tom Becker" },
 ];
 
-const categories = ["Brand", "Strategy", "Product", "Insights", "Press"];
-const statuses: Status[] = ["published", "draft", "scheduled", "archived"];
+const categoriesList = ["Brand", "Strategy", "Product", "Insights", "Press"];
+const statuses: PublishStatus[] = ["published", "draft", "pending", "private", "trash"];
 
 const titles = [
   "How modern brands win attention in 2026",
@@ -35,12 +53,12 @@ function dateOffset(days: number) {
 }
 
 const POSTS: Post[] = titles.map((t, i) => ({
-  id: `p${i+1}`,
+  id: i + 1,
   title: t,
   slug: t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
   excerpt: "A short, friendly summary that helps editors recognize the piece at a glance.",
   status: statuses[i % statuses.length],
-  category: categories[i % categories.length],
+  category: categoriesList[i % categoriesList.length],
   tags: ["marketing", i % 2 ? "growth" : "brand"],
   author: authors[i % authors.length],
   views: 320 + i * 187,
@@ -49,14 +67,14 @@ const POSTS: Post[] = titles.map((t, i) => ({
 }));
 
 const PAGES: Page[] = [
-  { id: "pg1", title: "Home", slug: "/", status: "published", template: "landing", updated_at: dateOffset(2), author: authors[0] },
-  { id: "pg2", title: "About us", slug: "/about", status: "published", template: "default", updated_at: dateOffset(7), author: authors[1] },
-  { id: "pg3", title: "Services", slug: "/services", status: "published", template: "default", updated_at: dateOffset(11), author: authors[0] },
-  { id: "pg4", title: "Pricing", slug: "/pricing", status: "draft", template: "landing", updated_at: dateOffset(1), author: authors[2] },
-  { id: "pg5", title: "Contact", slug: "/contact", status: "published", template: "default", updated_at: dateOffset(20), author: authors[3] },
-  { id: "pg6", title: "Privacy policy", slug: "/privacy", status: "published", template: "legal", updated_at: dateOffset(60), author: authors[1] },
-  { id: "pg7", title: "Terms", slug: "/terms", status: "published", template: "legal", updated_at: dateOffset(60), author: authors[1] },
-  { id: "pg8", title: "Spring campaign", slug: "/spring", status: "scheduled", template: "landing", updated_at: dateOffset(3), author: authors[2] },
+  { id: 1, title: "Home", slug: "/", status: "published", template: "landing", updated_at: dateOffset(2), author: authors[0] },
+  { id: 2, title: "About us", slug: "/about", status: "published", template: "default", updated_at: dateOffset(7), author: authors[1] },
+  { id: 3, title: "Services", slug: "/services", status: "published", template: "default", updated_at: dateOffset(11), author: authors[0] },
+  { id: 4, title: "Pricing", slug: "/pricing", status: "draft", template: "landing", updated_at: dateOffset(1), author: authors[2] },
+  { id: 5, title: "Contact", slug: "/contact", status: "published", template: "default", updated_at: dateOffset(20), author: authors[3] },
+  { id: 6, title: "Privacy policy", slug: "/privacy", status: "published", template: "legal", updated_at: dateOffset(60), author: authors[1] },
+  { id: 7, title: "Terms", slug: "/terms", status: "published", template: "legal", updated_at: dateOffset(60), author: authors[1] },
+  { id: 8, title: "Spring campaign", slug: "/spring", status: "pending", template: "landing", updated_at: dateOffset(3), author: authors[2] },
 ];
 
 const portfolioCovers = [
@@ -72,7 +90,7 @@ const PORTFOLIOS: Portfolio[] = [
   "Northwind Rebrand", "Aura Skincare Launch", "Lumen Fintech Site",
   "Verde Restaurant Group", "Helio Energy Report", "Kite Mobility App",
 ].map((title, i) => ({
-  id: `pf${i+1}`,
+  id: i + 1,
   title,
   client: title.split(" ")[0],
   category: ["Branding", "Web", "Campaign", "Brand", "Editorial", "Product"][i],
@@ -83,13 +101,93 @@ const PORTFOLIOS: Portfolio[] = [
 }));
 
 const MEDIA: MediaItem[] = Array.from({ length: 14 }).map((_, i) => ({
-  id: `m${i+1}`,
+  id: i + 1,
   name: `asset-${pad(i+1)}.${i % 3 === 0 ? "mp4" : i % 3 === 1 ? "pdf" : "jpg"}`,
   type: i % 3 === 0 ? "video" : i % 3 === 1 ? "document" : "image",
   size_kb: 240 + i * 110,
   url: portfolioCovers[i % portfolioCovers.length],
   uploaded_at: dateOffset(i),
 }));
+
+const PRODUCT_NAMES = ["Aurora Lamp", "Nimbus Chair", "Halo Speaker", "Echo Backpack", "Pulse Watch", "Lumen Notebook", "Drift Mug", "Vista Camera"];
+const PRODUCTS: Product[] = PRODUCT_NAMES.map((name, i) => ({
+  id: i + 1, name,
+  slug: name.toLowerCase().replace(/\s+/g, "-"),
+  type: (["simple", "variable", "simple", "external"] as const)[i % 4],
+  status: (["published", "published", "draft", "pending"] as const)[i % 4],
+  sku: `SKU-${1000 + i}`,
+  price: 29 + i * 18.5,
+  stock_status: (["instock", "instock", "outofstock", "onbackorder"] as const)[i % 4],
+  stock_quantity: 120 - i * 9,
+  updated_at: dateOffset(i),
+}));
+
+const ORDERS: Order[] = Array.from({ length: 12 }).map((_, i) => ({
+  id: i + 1,
+  number: `#10${(20 + i).toString()}`,
+  customer_name: ["Eva Martin", "Sam Patel", "Yui Tanaka", "Noah Kim", "Maya Stone"][i % 5],
+  customer_email: `customer${i+1}@example.com`,
+  status: (["pending","processing","completed","completed","on-hold","cancelled","refunded"] as const)[i % 7],
+  total: 49 + i * 23.4,
+  currency: "USD",
+  created_at: dateOffset(i),
+}));
+
+const CONTACTS: Contact[] = Array.from({ length: 9 }).map((_, i) => ({
+  id: i + 1,
+  name: ["Eva Martin","Sam Patel","Yui Tanaka","Noah Kim","Maya Stone","Liam Park","Olivia West","Ravi Kumar","Anya Sokolova"][i],
+  email: `lead${i+1}@example.com`,
+  phone: `+1 555-01${pad(i+10)}`,
+  subject: ["Website redesign", "Quote request", "Partnership", "Pricing inquiry", "Demo"][i % 5],
+  submitted_at: dateOffset(i),
+}));
+
+const LEADS: Lead[] = CONTACTS.slice(0, 8).map((c, i) => ({
+  id: i + 1,
+  contact_name: c.name,
+  status: (["new","qualified","proposal","won","lost","new","qualified","spam"] as const)[i],
+  score: 30 + i * 8,
+  source: ["Web", "Referral", "Ads", "Event"][i % 4],
+  channel: ["organic", "paid", "social", "email"][i % 4],
+  assignee_name: authors[i % authors.length].name,
+  captured_at: dateOffset(i),
+}));
+
+const COUPONS: Coupon[] = [
+  { id: 1, code: "SPRING20", discount_type: "percent", amount: 20, status: "active", usage_count: 142, usage_limit: 500, expires_at: dateOffset(-30) },
+  { id: 2, code: "WELCOME10", discount_type: "fixed_cart", amount: 10, status: "active", usage_count: 380, usage_limit: null, expires_at: null },
+  { id: 3, code: "BFRIDAY25", discount_type: "percent", amount: 25, status: "expired", usage_count: 1024, usage_limit: 1000, expires_at: dateOffset(120) },
+  { id: 4, code: "VIPONLY", discount_type: "fixed_product", amount: 50, status: "draft", usage_count: 0, usage_limit: 50, expires_at: null },
+  { id: 5, code: "SUMMER15", discount_type: "percent", amount: 15, status: "inactive", usage_count: 67, usage_limit: 200, expires_at: dateOffset(-200) },
+];
+
+const CATEGORIES: Category[] = categoriesList.map((name, i) => ({
+  id: i + 1, name, slug: name.toLowerCase(), parent_id: null,
+  posts_count: POSTS.filter((p) => p.category === name).length,
+  updated_at: dateOffset(i * 3),
+}));
+
+const TAG_NAMES = ["marketing", "growth", "brand", "design", "product", "case-study"];
+const TAGS: Tag[] = TAG_NAMES.map((name, i) => ({
+  id: i + 1, name, slug: name, posts_count: 3 + i, updated_at: dateOffset(i * 2),
+}));
+
+const REDIRECTS: Redirect[] = [
+  { id: 1, old_path: "/blog/old-post", new_url: "/posts/how-modern-brands-win-attention-in-2026", http_code: 301, is_active: true, hits: 1240, updated_at: dateOffset(2) },
+  { id: 2, old_path: "/services/web", new_url: "/services", http_code: 301, is_active: true, hits: 442, updated_at: dateOffset(8) },
+  { id: 3, old_path: "/promo", new_url: "/spring", http_code: 302, is_active: true, hits: 98, updated_at: dateOffset(1) },
+  { id: 4, old_path: "/legacy", new_url: "/about", http_code: 308, is_active: false, hits: 0, updated_at: dateOffset(40) },
+];
+
+const NAVIGATION: NavigationItem[] = [
+  { id: 1, title: "Home", menu_name: "Primary", url: "/", item_type: "page", sort_order: 1, status: "published" },
+  { id: 2, title: "About", menu_name: "Primary", url: "/about", item_type: "page", sort_order: 2, status: "published" },
+  { id: 3, title: "Services", menu_name: "Primary", url: "/services", item_type: "page", sort_order: 3, status: "published" },
+  { id: 4, title: "Blog", menu_name: "Primary", url: "/blog", item_type: "page", sort_order: 4, status: "published" },
+  { id: 5, title: "Contact", menu_name: "Primary", url: "/contact", item_type: "page", sort_order: 5, status: "published" },
+  { id: 6, title: "Privacy", menu_name: "Footer", url: "/privacy", item_type: "page", sort_order: 1, status: "published" },
+  { id: 7, title: "Terms", menu_name: "Footer", url: "/terms", item_type: "page", sort_order: 2, status: "published" },
+];
 
 function paginate<T>(rows: T[], p?: ListParams): Paginated<T> {
   const per_page = p?.per_page ?? 10;
@@ -101,34 +199,105 @@ function paginate<T>(rows: T[], p?: ListParams): Paginated<T> {
   };
 }
 
-function filterByStatusAndSearch<T extends { status?: Status; title?: string; name?: string }>(rows: T[], p?: ListParams) {
+function searchFilter<T extends Record<string, any>>(rows: T[], p?: ListParams, fields: string[] = ["title", "name"]): T[] {
   let r = rows;
-  if (p?.status && p.status !== "all") r = r.filter((x) => x.status === p.status);
-  if (p?.search) {
-    const q = p.search.toLowerCase();
-    r = r.filter((x) => (x.title ?? x.name ?? "").toLowerCase().includes(q));
+  const status = p?.status;
+  if (status && status !== "all") r = r.filter((x) => x.status === status);
+  const q = (p?.q ?? p?.search ?? "").trim().toLowerCase();
+  if (q) {
+    r = r.filter((x) => fields.some((f) => String(x[f] ?? "").toLowerCase().includes(q)));
   }
   return r;
 }
 
-const delay = <T,>(v: T) => new Promise<T>((res) => setTimeout(() => res(v), 250));
+const delay = <T,>(v: T) => new Promise<T>((res) => setTimeout(() => res(v), 200));
+
+function makeResource<T extends { id: number | string; status?: string }>(rows: T[], searchFields: string[]) {
+  return {
+    list: (p?: ListParams) => delay(paginate(searchFilter(rows, p, searchFields), p)),
+    get: (id: string | number) => delay(rows.find((r) => String(r.id) === String(id)) as T),
+    create: (body: Partial<T>) => {
+      const item = { ...body, id: rows.length + 1 } as T;
+      rows.unshift(item);
+      return delay(item);
+    },
+    update: (id: string | number, body: Partial<T>) => {
+      const i = rows.findIndex((r) => String(r.id) === String(id));
+      if (i >= 0) rows[i] = { ...rows[i], ...body };
+      return delay(rows[i]);
+    },
+    remove: (id: string | number) => {
+      const i = rows.findIndex((r) => String(r.id) === String(id));
+      if (i >= 0) rows.splice(i, 1);
+      return delay(undefined as void);
+    },
+    publish: (id: string | number, status: PublishStatus, published_at?: string | null) => {
+      const i = rows.findIndex((r) => String(r.id) === String(id));
+      if (i >= 0) rows[i] = { ...rows[i], status, ...(published_at !== undefined ? { published_at } : {}) } as T;
+      return delay(rows[i]);
+    },
+    seo: (id: string | number, _seo: any) => {
+      const i = rows.findIndex((r) => String(r.id) === String(id));
+      return delay(rows[i]);
+    },
+  };
+}
 
 export const mockApi = {
-  posts: { list: (p?: ListParams) => delay(paginate(filterByStatusAndSearch(POSTS, p), p)) },
-  pages: { list: (p?: ListParams) => delay(paginate(filterByStatusAndSearch(PAGES, p), p)) },
-  portfolios: { list: (p?: ListParams) => delay(paginate(filterByStatusAndSearch(PORTFOLIOS, p), p)) },
-  media: { list: (p?: ListParams) => delay(paginate(filterByStatusAndSearch(MEDIA, p), p)) },
+  posts: makeResource(POSTS, ["title", "slug", "category"]),
+  pages: makeResource(PAGES, ["title", "slug", "template"]),
+  portfolios: makeResource(PORTFOLIOS, ["title", "client", "category"]),
+  media: makeResource(MEDIA, ["name"]),
+  products: makeResource(PRODUCTS, ["name", "slug", "sku"]),
+  orders: makeResource(ORDERS, ["number", "customer_name", "customer_email"]),
+  contacts: makeResource(CONTACTS, ["name", "email", "subject"]),
+  leads: makeResource(LEADS, ["contact_name", "source", "assignee_name"]),
+  coupons: makeResource(COUPONS, ["code"]),
+  categories: makeResource(CATEGORIES, ["name", "slug"]),
+  tags: makeResource(TAGS, ["name", "slug"]),
+  redirects: makeResource(REDIRECTS, ["old_path", "new_url"]),
+  "navigation-items": makeResource(NAVIGATION, ["title", "menu_name", "url"]),
+
+  // Admin user management
+  me: () => delay(ADMIN_USERS.find((u) => u.id === CURRENT_USER_ID)!),
+  updateMe: (body: Partial<AdminUser>) => {
+    const i = ADMIN_USERS.findIndex((u) => u.id === CURRENT_USER_ID);
+    ADMIN_USERS[i] = { ...ADMIN_USERS[i], ...body };
+    return delay(ADMIN_USERS[i]);
+  },
+  setCurrentByEmail: (email: string) => {
+    const found = ADMIN_USERS.find((u) => u.email === email);
+    if (found) CURRENT_USER_ID = Number(found.id);
+  },
+  accounts: {
+    list: (p?: ListParams) => delay(paginate(searchFilter(ADMIN_USERS, p, ["name", "email", "login", "role"]), p)),
+  },
+  health: (): Promise<HealthStatus> => delay({
+    ok: true,
+    database: "up",
+    app: "Atelier CMS API (mock)",
+    version: "1.0.0",
+    checked_at: new Date().toISOString(),
+    latency_ms: 42,
+  }),
+
   stats: () => delay({
     posts_published: POSTS.filter((p) => p.status === "published").length,
     posts_draft: POSTS.filter((p) => p.status === "draft").length,
     pages_total: PAGES.length,
     portfolios_total: PORTFOLIOS.length,
+    products_total: PRODUCTS.length,
+    orders_total: ORDERS.length,
+    leads_total: LEADS.length,
+    contacts_total: CONTACTS.length,
     monthly_views: 48230,
+    monthly_revenue: ORDERS.reduce((s, o) => s + o.total, 0),
     growth_pct: 12.4,
-    top_posts: POSTS.slice(0, 5).map((p) => ({ id: p.id, title: p.title, views: p.views, status: p.status })),
+    top_posts: POSTS.slice(0, 5).map((p) => ({ id: String(p.id), title: p.title, views: p.views, status: p.status as string })),
     activity: Array.from({ length: 7 }).map((_, i) => ({
       day: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i],
       views: 1200 + Math.round(Math.sin(i) * 400 + i * 180),
     })),
+    recent_orders: ORDERS.slice(0, 5),
   }),
 };

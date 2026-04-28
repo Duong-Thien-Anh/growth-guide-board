@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { ArrowUpRight, Eye, FileText, Files, Briefcase, TrendingUp, Download, FileSpreadsheet, FileType2 } from "lucide-react";
+import { ArrowUpRight, Eye, FileText, Files, Briefcase, TrendingUp, Download, FileSpreadsheet, FileType2, ShoppingBag, Receipt, UserSquare2, DollarSign } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { exportOverviewCsv, exportOverviewPdf } from "@/lib/exports/overview";
 import { toast } from "sonner";
@@ -81,9 +81,16 @@ function Overview() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Stat icon={TrendingUp} label="Monthly views" value={data ? data.monthly_views.toLocaleString() : "—"} hint={data ? `▲ ${data.growth_pct}% vs last month` : ""} accent />
+        <Stat icon={DollarSign} label="Monthly revenue" value={data ? `$${Math.round(data.monthly_revenue).toLocaleString()}` : "—"} hint={`${data?.orders_total ?? 0} orders this month`} />
         <Stat icon={FileText} label="Published posts" value={data?.posts_published ?? "—"} hint={`${data?.posts_draft ?? 0} drafts in progress`} />
-        <Stat icon={Files} label="Live pages" value={data?.pages_total ?? "—"} hint="Across the marketing site" />
-        <Stat icon={Briefcase} label="Portfolio cases" value={data?.portfolios_total ?? "—"} hint="Showcased on the site" />
+        <Stat icon={UserSquare2} label="Open leads" value={data?.leads_total ?? "—"} hint={`${data?.contacts_total ?? 0} contacts captured`} />
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+        <Stat icon={Files} label="Live pages" value={data?.pages_total ?? "—"} />
+        <Stat icon={Briefcase} label="Portfolio cases" value={data?.portfolios_total ?? "—"} />
+        <Stat icon={ShoppingBag} label="Products" value={data?.products_total ?? "—"} />
+        <Stat icon={Receipt} label="Total orders" value={data?.orders_total ?? "—"} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
