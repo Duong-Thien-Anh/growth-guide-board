@@ -6,4 +6,17 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig();
+const backendOrigin = process.env.VITE_BACKEND_ORIGIN ?? "http://127.0.0.1:8000";
+
+export default defineConfig({
+  vite: {
+    server: {
+      proxy: {
+        "/api": {
+          target: backendOrigin,
+          changeOrigin: true,
+        },
+      },
+    },
+  },
+});
