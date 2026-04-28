@@ -137,10 +137,9 @@ export const api = {
       await new Promise((r) => setTimeout(r, 300));
       const token = "mock-token-" + Date.now();
       auth.setToken(token);
-      return {
-        token,
-        user: { id: 1, name: "Linh Nguyen", email, role: "admin", registered: new Date().toISOString() },
-      };
+      mockApi.setCurrentByEmail(email);
+      const user = await mockApi.me();
+      return { token, user: { ...user, email } };
     }
     const r = await request<{ token: string; user: AdminUser }>("/login", {
       method: "POST",
@@ -155,8 +154,24 @@ export const api = {
   },
   me: (): Promise<AdminUser> =>
     USE_MOCK
-      ? Promise.resolve({ id: 1, name: "Linh Nguyen", email: "linh@atelier.co", role: "admin" })
+      ? mockApi.me()
       : request<{ data?: AdminUser } & AdminUser>("/me").then((r: any) => r.data ?? r),
+  updateMe: (body: Partial<AdminUser>): Promise<AdminUser> =>
+    USE_MOCK
+      ? mockApi.updateMe(body)
+      : request<{ data: AdminUser }>("/me", { method: "PATCH", body: JSON.stringify(body) }).then((r) => r.data),
+
+  health: (): Promise<import("./types").HealthStatus> =>
+    USE_MOCK
+      ? mockApi.health()
+      : request<import("./types").HealthStatus>("/health"),
+
+  accounts: {
+    list: (p?: ListParams) =>
+      USE_MOCK
+        ? mockApi.accounts.list(p)
+        : request<{ data: LaravelPaginator<AdminUser> }>(`/admin/accounts${buildQuery(p)}`).then(unwrapList),
+  },
 
   // Resources
   posts: crud<Post>("posts"),
