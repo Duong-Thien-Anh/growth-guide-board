@@ -5,7 +5,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { ArrowUpRight, Eye, FileText, Files, Briefcase, TrendingUp } from "lucide-react";
+import { ArrowUpRight, Eye, FileText, Files, Briefcase, TrendingUp, Download, FileSpreadsheet, FileType2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { exportOverviewCsv, exportOverviewPdf } from "@/lib/exports/overview";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,6 +48,35 @@ function Overview() {
         title="Good morning, Linh 👋"
         description="Here's what's happening across your content this week."
         actionLabel="New post"
+        actions={
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" disabled={!data} className="gap-2">
+                <Download className="h-4 w-4" /> Export
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem
+                onClick={() => {
+                  if (!data) return;
+                  exportOverviewCsv(data);
+                  toast.success("CSV downloaded");
+                }}
+              >
+                <FileSpreadsheet className="h-4 w-4 mr-2" /> Download CSV
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  if (!data) return;
+                  exportOverviewPdf(data);
+                  toast.success("PDF downloaded");
+                }}
+              >
+                <FileType2 className="h-4 w-4 mr-2" /> Download PDF
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        }
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
