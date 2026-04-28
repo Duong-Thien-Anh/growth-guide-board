@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TagsRouteImport } from './routes/tags'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RedirectsRouteImport } from './routes/redirects'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as PortfoliosRouteImport } from './routes/portfolios'
@@ -24,6 +25,7 @@ import { Route as LeadsRouteImport } from './routes/leads'
 import { Route as CouponsRouteImport } from './routes/coupons'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as CategoriesRouteImport } from './routes/categories'
+import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TagsRoute = TagsRouteImport.update({
@@ -39,6 +41,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const RedirectsRoute = RedirectsRouteImport.update({
   id: '/redirects',
   path: '/redirects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -101,6 +108,11 @@ const CategoriesRoute = CategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -109,6 +121,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
   '/categories': typeof CategoriesRoute
   '/contacts': typeof ContactsRoute
   '/coupons': typeof CouponsRoute
@@ -121,12 +134,14 @@ export interface FileRoutesByFullPath {
   '/portfolios': typeof PortfoliosRoute
   '/posts': typeof PostsRoute
   '/products': typeof ProductsRoute
+  '/profile': typeof ProfileRoute
   '/redirects': typeof RedirectsRoute
   '/settings': typeof SettingsRoute
   '/tags': typeof TagsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
   '/categories': typeof CategoriesRoute
   '/contacts': typeof ContactsRoute
   '/coupons': typeof CouponsRoute
@@ -139,6 +154,7 @@ export interface FileRoutesByTo {
   '/portfolios': typeof PortfoliosRoute
   '/posts': typeof PostsRoute
   '/products': typeof ProductsRoute
+  '/profile': typeof ProfileRoute
   '/redirects': typeof RedirectsRoute
   '/settings': typeof SettingsRoute
   '/tags': typeof TagsRoute
@@ -146,6 +162,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
   '/categories': typeof CategoriesRoute
   '/contacts': typeof ContactsRoute
   '/coupons': typeof CouponsRoute
@@ -158,6 +175,7 @@ export interface FileRoutesById {
   '/portfolios': typeof PortfoliosRoute
   '/posts': typeof PostsRoute
   '/products': typeof ProductsRoute
+  '/profile': typeof ProfileRoute
   '/redirects': typeof RedirectsRoute
   '/settings': typeof SettingsRoute
   '/tags': typeof TagsRoute
@@ -166,6 +184,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/accounts'
     | '/categories'
     | '/contacts'
     | '/coupons'
@@ -178,12 +197,14 @@ export interface FileRouteTypes {
     | '/portfolios'
     | '/posts'
     | '/products'
+    | '/profile'
     | '/redirects'
     | '/settings'
     | '/tags'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/accounts'
     | '/categories'
     | '/contacts'
     | '/coupons'
@@ -196,12 +217,14 @@ export interface FileRouteTypes {
     | '/portfolios'
     | '/posts'
     | '/products'
+    | '/profile'
     | '/redirects'
     | '/settings'
     | '/tags'
   id:
     | '__root__'
     | '/'
+    | '/accounts'
     | '/categories'
     | '/contacts'
     | '/coupons'
@@ -214,6 +237,7 @@ export interface FileRouteTypes {
     | '/portfolios'
     | '/posts'
     | '/products'
+    | '/profile'
     | '/redirects'
     | '/settings'
     | '/tags'
@@ -221,6 +245,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountsRoute: typeof AccountsRoute
   CategoriesRoute: typeof CategoriesRoute
   ContactsRoute: typeof ContactsRoute
   CouponsRoute: typeof CouponsRoute
@@ -233,6 +258,7 @@ export interface RootRouteChildren {
   PortfoliosRoute: typeof PortfoliosRoute
   PostsRoute: typeof PostsRoute
   ProductsRoute: typeof ProductsRoute
+  ProfileRoute: typeof ProfileRoute
   RedirectsRoute: typeof RedirectsRoute
   SettingsRoute: typeof SettingsRoute
   TagsRoute: typeof TagsRoute
@@ -259,6 +285,13 @@ declare module '@tanstack/react-router' {
       path: '/redirects'
       fullPath: '/redirects'
       preLoaderRoute: typeof RedirectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -345,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -357,6 +397,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountsRoute: AccountsRoute,
   CategoriesRoute: CategoriesRoute,
   ContactsRoute: ContactsRoute,
   CouponsRoute: CouponsRoute,
@@ -369,6 +410,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfoliosRoute: PortfoliosRoute,
   PostsRoute: PostsRoute,
   ProductsRoute: ProductsRoute,
+  ProfileRoute: ProfileRoute,
   RedirectsRoute: RedirectsRoute,
   SettingsRoute: SettingsRoute,
   TagsRoute: TagsRoute,

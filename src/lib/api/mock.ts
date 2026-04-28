@@ -1,7 +1,22 @@
 import type {
   Post, Page, Portfolio, MediaItem, ListParams, Paginated,
   PublishStatus, Product, Order, Contact, Lead, Coupon, Category, Tag, Redirect, NavigationItem,
+  AdminUser, HealthStatus,
 } from "./types";
+
+const ADMIN_USERS: AdminUser[] = [
+  {
+    id: 1, name: "Linh Nguyen", email: "linh@atelier.co", login: null,
+    role: "super_admin", registered: "2024-03-12T10:00:00Z",
+    billing_first_name: "Linh", billing_last_name: "Nguyen", billing_phone: "+84 90 123 4567",
+    billing_address: "12 Nguyen Hue", billing_city: "Ho Chi Minh City", billing_country: "Vietnam",
+  },
+  { id: 2, name: "Marcus Lee", email: "marcus@atelier.co", login: "marcus", role: "admin", registered: "2024-06-01T10:00:00Z" },
+  { id: 3, name: "Priya Shah", email: "priya@atelier.co", login: "priya", role: "administrator", registered: "2025-01-22T10:00:00Z" },
+  { id: 4, name: "Tom Becker", email: "tom@atelier.co", login: "tom", role: "admin", registered: "2025-09-04T10:00:00Z" },
+];
+let CURRENT_USER_ID: number = 1;
+
 
 const authors = [
   { id: 1, name: "Linh Nguyen" },
@@ -242,6 +257,29 @@ export const mockApi = {
   tags: makeResource(TAGS, ["name", "slug"]),
   redirects: makeResource(REDIRECTS, ["old_path", "new_url"]),
   "navigation-items": makeResource(NAVIGATION, ["title", "menu_name", "url"]),
+
+  // Admin user management
+  me: () => delay(ADMIN_USERS.find((u) => u.id === CURRENT_USER_ID)!),
+  updateMe: (body: Partial<AdminUser>) => {
+    const i = ADMIN_USERS.findIndex((u) => u.id === CURRENT_USER_ID);
+    ADMIN_USERS[i] = { ...ADMIN_USERS[i], ...body };
+    return delay(ADMIN_USERS[i]);
+  },
+  setCurrentByEmail: (email: string) => {
+    const found = ADMIN_USERS.find((u) => u.email === email);
+    if (found) CURRENT_USER_ID = Number(found.id);
+  },
+  accounts: {
+    list: (p?: ListParams) => delay(paginate(searchFilter(ADMIN_USERS, p, ["name", "email", "login", "role"]), p)),
+  },
+  health: (): Promise<HealthStatus> => delay({
+    ok: true,
+    database: "up",
+    app: "Atelier CMS API (mock)",
+    version: "1.0.0",
+    checked_at: new Date().toISOString(),
+    latency_ms: 42,
+  }),
 
   stats: () => delay({
     posts_published: POSTS.filter((p) => p.status === "published").length,
