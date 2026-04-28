@@ -197,7 +197,7 @@ function searchFilter<T extends Record<string, any>>(rows: T[], p?: ListParams, 
 
 const delay = <T,>(v: T) => new Promise<T>((res) => setTimeout(() => res(v), 200));
 
-function makeResource<T extends { id: number | string; status?: PublishStatus }>(rows: T[], searchFields: string[]) {
+function makeResource<T extends { id: number | string; status?: string }>(rows: T[], searchFields: string[]) {
   return {
     list: (p?: ListParams) => delay(paginate(searchFilter(rows, p, searchFields), p)),
     get: (id: string | number) => delay(rows.find((r) => String(r.id) === String(id)) as T),
