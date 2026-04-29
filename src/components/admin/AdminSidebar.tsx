@@ -9,8 +9,9 @@ import {
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/api/client";
+import { api } from "@/lib/api/client";
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Item = { title: string; url: string; icon: React.ComponentType<{ className?: string }> };
 
@@ -75,11 +76,13 @@ export function AdminSidebar() {
   const collapsed = state === "collapsed";
   const path = useRouterState({ select: (r) => r.location.pathname });
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const isActive = (url: string) => (url === "/" ? path === "/" : path.startsWith(url));
 
-  function signOut() {
-    auth.clear();
-    navigate({ to: "/login" });
+  async function signOut() {
+    await api.logout().catch(() => {});
+    qc.clear();
+    navigate({ to: "/login", replace: true });
   }
 
   return (

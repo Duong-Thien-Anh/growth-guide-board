@@ -1,6 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AvatarMenu } from "@/components/admin/AvatarMenu";
@@ -9,6 +9,7 @@ import { Search, Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/sonner";
 import { I18nProvider } from "@/lib/i18n";
+import { auth } from "@/lib/api/client";
 
 import appCss from "../styles.css?url";
 
@@ -59,6 +60,20 @@ function RootComponent() {
   const [qc] = useState(() => new QueryClient({ defaultOptions: { queries: { staleTime: 30_000 } } }));
   const path = useRouterState({ select: (r) => r.location.pathname });
   const isAuthRoute = path === "/login";
+  const hasToken = Boolean(auth.getToken());
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (!hasToken && !isAuthRoute) {
+      window.location.replace("/login");
+      return;
+    }
+
+    if (hasToken && isAuthRoute) {
+      window.location.replace("/");
+    }
+  }, [hasToken, isAuthRoute]);
 
   return (
     <QueryClientProvider client={qc}>

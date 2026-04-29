@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { api, auth, USE_MOCK } from "@/lib/api/client";
 import { Card } from "@/components/ui/card";
@@ -23,8 +23,8 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { t } = useI18n();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("linh@atelier.co");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -64,11 +64,28 @@ function LoginPage() {
             <form onSubmit={onSubmit} className="grid gap-4">
               <div>
                 <Label htmlFor="email">{t("auth.email")}</Label>
-                <Input id="email" type="email" autoFocus required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5" />
+                <Input
+                  id="email"
+                  type="email"
+                  autoFocus
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1.5"
+                  autoComplete="username"
+                />
               </div>
               <div>
                 <Label htmlFor="password">{t("auth.password")}</Label>
-                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1.5"
+                  autoComplete="current-password"
+                />
               </div>
               <Button type="submit" disabled={loading} className="w-full">
                 {loading ? t("auth.signingIn") : t("auth.signIn")}
@@ -78,10 +95,6 @@ function LoginPage() {
               )}
             </form>
           </Card>
-
-          <p className="text-xs text-muted-foreground text-center mt-4">
-            <Link to="/" className="hover:text-foreground">{t("auth.back")}</Link>
-          </p>
         </div>
       </div>
     </div>

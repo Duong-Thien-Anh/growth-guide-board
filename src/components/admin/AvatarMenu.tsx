@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { api } from "@/lib/api/client";
@@ -15,12 +15,14 @@ function initials(name?: string) {
 export function AvatarMenu() {
   const { t } = useI18n();
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api.me() });
 
   async function signOut() {
-    await api.logout();
+    await api.logout().catch(() => {});
+    qc.clear();
     toast.success("Signed out");
-    navigate({ to: "/login" });
+    navigate({ to: "/login", replace: true });
   }
 
   return (
