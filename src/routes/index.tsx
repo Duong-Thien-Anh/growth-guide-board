@@ -39,13 +39,14 @@ function Stat({ icon: Icon, label, value, hint, accent }: { icon: React.Componen
 
 function Overview() {
   const { data, isLoading } = useQuery({ queryKey: ["stats"], queryFn: () => api.stats() });
+  const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api.me() });
 
   const max = Math.max(...(data?.activity.map((a) => a.views) ?? [1]));
 
   return (
     <div>
       <PageHeader
-        title="Good morning, Linh 👋"
+        title={me?.name ? `Good morning ${me.name}` : "Good morning"}
         description="Here's what's happening across your content this week."
         actionLabel="New post"
         actions={
@@ -139,3 +140,4 @@ function Overview() {
     </div>
   );
 }
+
