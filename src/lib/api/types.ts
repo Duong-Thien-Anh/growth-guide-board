@@ -69,6 +69,10 @@ export interface Post {
   title: string;
   slug: string;
   excerpt: string;
+  content?: string;
+  meta_title?: string;
+  meta_description?: string;
+  wp_post_id?: ID | null;
   status: PublishStatus;
   category: string;
   tags: string[];

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { api, USE_MOCK } from "@/lib/api/client";
+import { api } from "@/lib/api/client";
 import { useI18n } from "@/lib/i18n";
 import { Activity, CheckCircle2, XCircle, RefreshCw } from "lucide-react";
 
@@ -93,11 +93,7 @@ function SettingsPage() {
               <Input id="api" placeholder="https://api.example.com/api/v1" className="mt-1.5 font-mono text-sm" />
             </div>
             <div className="rounded-md bg-muted/40 border border-dashed p-3 text-xs text-muted-foreground">
-              Currently running on{" "}
-              <span className="font-medium text-foreground">
-                {USE_MOCK ? "mock data" : "Laravel API"}
-              </span>
-              . Configure <code>VITE_USE_MOCK</code>, <code>VITE_API_BASE_URL</code>, and <code>VITE_BACKEND_ORIGIN</code> in your env file.
+              Connected to Laravel API. Configure <code>VITE_API_BASE_URL</code> and <code>VITE_BACKEND_ORIGIN</code> in your env file.
             </div>
           </div>
         </Card>

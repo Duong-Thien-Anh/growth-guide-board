@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { api, auth, USE_MOCK } from "@/lib/api/client";
+import { api, auth } from "@/lib/api/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -90,9 +90,6 @@ function LoginPage() {
               <Button type="submit" disabled={loading} className="w-full">
                 {loading ? t("auth.signingIn") : t("auth.signIn")}
               </Button>
-              {USE_MOCK && (
-                <p className="text-xs text-muted-foreground text-center">{t("auth.mockHint")}</p>
-              )}
             </form>
           </Card>
         </div>
